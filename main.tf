@@ -35,7 +35,7 @@ data "template_file" "user_data" {
 }
 
 module "app" {
-  source = "git.bashton.net/Bashton-Terraform-Modules/tf-aws-asg"
+  source = "../modules/tf-aws-asg"
 
   subnets              = ["${var.vpc_subnets}"]
   name                 = "gitlab-runner-${var.vpc_env}"
