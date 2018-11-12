@@ -35,7 +35,7 @@ data "template_file" "user_data" {
 }
 
 module "runner" {
-  source = "../modules/tf-aws-asg"
+  source = "../tf-aws-asg"
 
   subnets              = ["${var.vpc_subnets}"]
   name                 = "gitlab-runner-${var.vpc_env}"
