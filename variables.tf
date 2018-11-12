@@ -18,6 +18,12 @@ variable "ami_id" {
     type = "string"
 }
 
+variable "instance_type" {
+    description = "AWS Instance Type to use"
+    type = "string"
+    default = "t2.small"
+}
+
 variable "iam_profile" {
     description = "Resource ID of the IAM profile the instance will use"
     type = "string"
@@ -63,6 +69,13 @@ variable "gitlab_concurrent_job" {
     default = "1"
 } 
 
+variable "gitlab_check_interval" {
+    description = "Amount of time between checks for work"
+    type = "string"
+    default = "5s"
+}
+
+
 variable "gitlab_rct_low_free_space" {
     description = "Threshold for when to trigger the cache and image removal"
     type = "string"
@@ -75,13 +88,13 @@ variable "gitlab_rct_expected_free_space" {
     default = "2GB"
 }
 
-variable "gitlab_rct_low_free_file_space" {
+variable "gitlab_rct_low_free_files_space" {
     description = "When the number of free files (i-nodes) runs below this value trigger the cache and image removal"
     type = "string"
     default = "131072"
 }
 
-variable "gitlab_rct_expected_free_file_space" {
+variable "gitlab_rct_expected_free_files_space" {
     description = "How many free files (i-nodes) to cleanup"
     type = "string"
     default = "262144"
