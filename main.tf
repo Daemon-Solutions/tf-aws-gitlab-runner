@@ -14,7 +14,7 @@
  * `terraform-docs --no-sort md . > README.md`
  *
 */
-data "template_file" "user_data" {
+data "template_file" "runner_userdata" {
   template = "${file("${path.module}/user-data.sh")}"
   vars {
     GITLAB_RUNNER_NAME                    = "${var.gitlab_runner_name}"
@@ -46,7 +46,7 @@ module "runner" {
   ami_id               = "${var.ami_id}"
   iam_instance_profile = "${var.iam_profile}"
   security_groups      = ["${var.security_groups}"]
-  user_data            = "${data.template_file.app_userdata.rendered}"
+  user_data            = "${data.template_file.runner_userdata.rendered}"
   min                  = "1"
   max                  = "1"
 
