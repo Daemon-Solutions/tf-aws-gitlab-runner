@@ -41,7 +41,7 @@ module "runner" {
   name                 = "gitlab-runner-${var.vpc_env}"
   service              = "gitlab-runner"
   key_name             = "${var.key_name}"
-  instance_type        = "${var.instacne_size}"
+  instance_type        = "${var.instance_type}"
   envname              = "${var.vpc_env}"
   ami_id               = "${var.ami_id}"
   iam_instance_profile = "${var.iam_profile}"
