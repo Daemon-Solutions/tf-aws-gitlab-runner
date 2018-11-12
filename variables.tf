@@ -68,7 +68,6 @@ variable "gitlab_concurrent_job" {
     type = "string"
     default = "1"
 } 
-
 variable "gitlab_check_interval" {
     description = "Amount of time between checks for work"
     type = "string"
@@ -88,13 +87,13 @@ variable "gitlab_rct_expected_free_space" {
     default = "2GB"
 }
 
-variable "gitlab_rct_low_free_files_space" {
+variable "gitlab_rct_low_free_files_count" {
     description = "When the number of free files (i-nodes) runs below this value trigger the cache and image removal"
     type = "string"
     default = "131072"
 }
 
-variable "gitlab_rct_expected_free_files_space" {
+variable "gitlab_rct_expected_free_files_count" {
     description = "How many free files (i-nodes) to cleanup"
     type = "string"
     default = "262144"
