@@ -78,12 +78,6 @@ variable "gitlab_rct_expected_free_space" {
 variable "gitlab_rct_low_free_file_space" {
     description = "When the number of free files (i-nodes) runs below this value trigger the cache and image removal"
     type = "string"
-    default = "2GB"
-}
-
-variable "gitlab_rct_low_free_file_space" {
-    description = "When the number of free files (i-nodes) runs below this value trigger the cache and image removal"
-    type = "string"
     default = "131072"
 }
 

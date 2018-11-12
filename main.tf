@@ -34,7 +34,7 @@ data "template_file" "user_data" {
   }
 }
 
-module "app" {
+module "runner" {
   source = "../modules/tf-aws-asg"
 
   subnets              = ["${var.vpc_subnets}"]
