@@ -71,7 +71,7 @@ variable "gitlab_concurrent_job" {
 variable "gitlab_check_interval" {
     description = "Amount of time between checks for work"
     type = "string"
-    default = "5s"
+    default = "5"
 }
 
 
