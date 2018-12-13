@@ -63,6 +63,12 @@ variable "gitlab_runner_docker_image" {
     default = "terraform:light"
 }
 
+variable "gitlab_runner_docker_privileged" {
+    description = "Toggle Gitlab Runner running privileged"
+    type = "string"
+    default = "false"
+}
+
 variable "gitlab_concurrent_job" {
     description = "Number of concurrent tasks to run"
     type = "string"

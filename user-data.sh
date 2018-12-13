@@ -29,7 +29,8 @@ gitlab-runner register --non-interactive \
                        --registration-token "${GITLAB_RUNNER_TOKEN}" \
                        --executor docker \
                        --tag-list "${GITLAB_RUNNER_TAGS}" \
-                       --docker-image "${GITLAB_RUNNER_DOCKER_IMAGE}"
+                       --docker-image "${GITLAB_RUNNER_DOCKER_IMAGE}" \
+                       ${GITLAB_RUNNER_DOCKER_PRIVILEGED}
 
 # Start services
 service docker start
