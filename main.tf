@@ -32,6 +32,7 @@ data "template_file" "runner_userdata" {
     GITLAB_RCT_EXPECTED_FREE_FILES_COUNT  = "${var.gitlab_rct_expected_free_files_count}"
     GITLAB_RCT_DEFAULT_TTL                = "${var.gitlab_rct_default_ttl}"
     GITLAB_RCT_USE_DF                     = "${var.gitlab_rct_use_df}"
+    AWS_REGION                            = "${data.aws_region.current.name}"
   }
 }
 

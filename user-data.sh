@@ -14,6 +14,9 @@ yum install -y gitlab-ci-multi-runner
 sudo chkconfig docker on
 sudo chkconfig gitlab-runner on
 
+# Start docker, we'll need it soon
+service docker start
+
 # Add gitlab-runner config
 mkdir -p /etc/gitlab-runner
 cat > /etc/gitlab-runner/config.toml <<- EOM
@@ -21,6 +24,12 @@ concurrent = ${GITLAB_CONCURRENT_JOB}
 check_interval = ${GITLAB_CHECK_INTERVAL}
 
 EOM
+
+# Add ecr-credential-helper
+docker run -i -v /usr/local/bin:/artifacts golang:1.8 sh << COMMANDS
+go get -u github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cli/docker-credential-ecr-login
+cp \$${GOPATH}/bin/docker-credential-ecr-login /artifacts
+COMMANDS
 
 # Register gitlab runner
 gitlab-runner register --non-interactive \
@@ -30,10 +39,11 @@ gitlab-runner register --non-interactive \
                        --executor docker \
                        --tag-list "${GITLAB_RUNNER_TAGS}" \
                        --docker-image "${GITLAB_RUNNER_DOCKER_IMAGE}" \
+                       --env AWS_REGION=${AWS_REGION} \
+                       --env DOCKER_AUTH_CONFIG={\"credsStore\":\"ecr-login\"} \
                        ${GITLAB_RUNNER_DOCKER_PRIVILEGED}
 
 # Start services
-service docker start
 service gitlab-runner start
 
 # Launch Gitlab Runner Cleanup Tool
