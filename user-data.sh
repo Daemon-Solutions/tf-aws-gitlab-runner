@@ -39,12 +39,20 @@ gitlab-runner register --non-interactive \
                        --executor docker \
                        --tag-list "${GITLAB_RUNNER_TAGS}" \
                        --docker-image "${GITLAB_RUNNER_DOCKER_IMAGE}" \
-                       --env AWS_REGION=${AWS_REGION} \
                        --env DOCKER_AUTH_CONFIG={\"credsStore\":\"ecr-login\"} \
                        ${GITLAB_RUNNER_DOCKER_PRIVILEGED}
 
+# Set env var for gitlab-runner, needed for ecr-login
+mkdir -p /etc/systemd/system/gitlab-runner.service.d
+cat > /etc/systemd/system/gitlab-runner.service.d/override.conf <<- EOM
+[Service]
+Environment=AWS_REGION=${AWS_REGION}
+EOM
+
+systemctl daemon-reload
+
 # Start services
-service gitlab-runner start
+systemctl restart gitlab-runner
 
 # Launch Gitlab Runner Cleanup Tool
 docker run -d \
