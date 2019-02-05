@@ -116,3 +116,7 @@ variable "gitlab_rct_use_df" {
     type = "string"
     default = "1"
 }
+
+variable "extra_asg_tags" {
+  default = []
+}

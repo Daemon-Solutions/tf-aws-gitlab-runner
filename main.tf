@@ -51,6 +51,7 @@ module "runner" {
   user_data            = "${data.template_file.runner_userdata.rendered}"
   min                  = "1"
   max                  = "1"
+  extra_tags           = "${var.extra_asg_tags}"
 
 }
 
