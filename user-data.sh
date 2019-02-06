@@ -66,3 +66,11 @@ docker run -d \
       -v /var/run/docker.sock:/var/run/docker.sock \
       --name=gitlab-runner-docker-cleanup \
       quay.io/gitlab/gitlab-runner-docker-cleanup
+
+# Run prometheus node-exporter
+docker run -d \
+  --net="host" \
+  --pid="host" \
+  -v "/:/host:ro,rslave" \
+  quay.io/prometheus/node-exporter:v0.17.0 \
+  --path.rootfs /host
