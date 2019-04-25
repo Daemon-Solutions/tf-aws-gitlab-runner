@@ -23,6 +23,7 @@ data "template_file" "runner_userdata" {
     GITLAB_RUNNER_TAGS                    = "${var.gitlab_runner_tags}"
     GITLAB_RUNNER_DOCKER_IMAGE            = "${var.gitlab_runner_docker_image}"
     GITLAB_RUNNER_DOCKER_PRIVILEGED       = "${var.gitlab_runner_docker_privileged ? "--docker-privileged" : ""}"
+    GITLAB_RUNNER_LOCKED                  = "${var.gitlab_runner_locked}"
     GITLAB_CONCURRENT_JOB                 = "${var.gitlab_concurrent_job}"
     GITLAB_CHECK_INTERVAL                 = "${var.gitlab_check_interval}"
 

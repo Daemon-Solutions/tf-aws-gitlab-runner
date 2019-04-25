@@ -40,6 +40,7 @@ gitlab-runner register --non-interactive \
                        --tag-list "${GITLAB_RUNNER_TAGS}" \
                        --docker-image "${GITLAB_RUNNER_DOCKER_IMAGE}" \
                        --env DOCKER_AUTH_CONFIG={\"credsStore\":\"ecr-login\"} \
+                       --locked="${GITLAB_RUNNER_LOCKED}" \
                        ${GITLAB_RUNNER_DOCKER_PRIVILEGED}
 
 # Set env var for gitlab-runner, needed for ecr-login

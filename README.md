@@ -29,6 +29,7 @@ This README is generated with [terraform-docs](https://github.com/segmentio/terr
 | gitlab\_rct\_use\_df | Use a command line df tool to check disk space. Set to false when connecting to remote Docker Engine. Set to true when using with locally installed Docker Engine | string | `"1"` | no |
 | gitlab\_runner\_docker\_image | Gitlab Runner default docker image. | string | `"terraform:light"` | no |
 | gitlab\_runner\_docker\_privileged | Toggle Gitlab Runner running privileged | string | `"false"` | no |
+| gitlab\_runner\_locked | Toggle locking the Gitlab Runner to the specific project | string | `"true"` | no |
 | gitlab\_runner\_name | Name that the runner will appear with in GitLab | string | n/a | yes |
 | gitlab\_runner\_tags | Tags to add to the runner | string | `"specific,docker"` | no |
 | gitlab\_runner\_token | Token used to authenticate with CI server | string | n/a | yes |

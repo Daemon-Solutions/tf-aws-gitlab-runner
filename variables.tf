@@ -80,6 +80,11 @@ variable "gitlab_check_interval" {
     default = "5"
 }
 
+variable "gitlab_runner_locked" {
+    description = "Toggle locking the Gitlab Runner to the specific project"
+    type = "string"
+    default = "true"
+}
 
 variable "gitlab_rct_low_free_space" {
     description = "Threshold for when to trigger the cache and image removal"
