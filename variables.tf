@@ -120,3 +120,9 @@ variable "gitlab_rct_use_df" {
 variable "extra_asg_tags" {
   default = []
 }
+
+variable "enabled" {
+    type = "string"
+    default = true
+    description = "Whether or not to create resources"
+}
