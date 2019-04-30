@@ -128,6 +128,6 @@ variable "extra_asg_tags" {
 
 variable "enabled" {
     type = "string"
-    default = true
+    default = "true"
     description = "Whether or not to create resources"
 }
