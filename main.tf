@@ -40,7 +40,7 @@ data "template_file" "runner_userdata" {
 module "runner" {
   source = "git::ssh://git@gitlab.com/claranet-pcp/terraform/aws/tf-aws-asg.git?ref=v0.7.2"
 
-  enabled              = "${var.enabled == true ? 1 : 0}"
+  enabled              = "${var.enabled == "true" ? 1 : 0}"
   subnets              = ["${var.vpc_subnets}"]
   name                 = "gitlab-runner-${var.vpc_env}"
   service              = "gitlab-runner"
