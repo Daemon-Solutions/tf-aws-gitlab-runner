@@ -5,12 +5,16 @@ A Gitlab Runner Terraform Module
 Give you:
 - An ASG for a single EC2 node with gitlab runner installed and running
 
+## Terraform version compatibility
+
+| Module version | Terraform version |
+|----------------|-------------------|
+| 1.x.x          | 0.12.x            |
+| 0.x.x          | 0.11.x            |
+
 ## Contributing
 
 Ensure any variables you add have a type and a description.
-This README is generated with [terraform-docs](https://github.com/segmentio/terraform-docs):
-
-`terraform-docs --no-sort md . > README.md`
 
 ## Inputs
 
