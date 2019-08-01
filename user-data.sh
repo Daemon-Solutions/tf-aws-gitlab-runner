@@ -11,8 +11,12 @@ curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-
 yum install -y gitlab-ci-multi-runner
 
 # Enable Services at startup
+sudo chkconfig ntpd on
 sudo chkconfig docker on
 sudo chkconfig gitlab-runner on
+
+# Start ntpd to avoid clock drift
+service ntpd start
 
 # Start docker, we'll need it soon
 service docker start
