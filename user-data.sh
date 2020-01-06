@@ -3,23 +3,12 @@
 # Update system
 yum update -y && \
 
-# Install htop and docker
-yum install -y docker && \
+# Install ntp and docker
+yum install -y ntp docker && \
 
 # Install Gitlab CI Multi Runner
 curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-runner/script.rpm.sh | bash && \
 yum install -y gitlab-ci-multi-runner
-
-# Enable Services at startup
-sudo chkconfig ntpd on
-sudo chkconfig docker on
-sudo chkconfig gitlab-runner on
-
-# Start ntpd to avoid clock drift
-service ntpd start
-
-# Start docker, we'll need it soon
-service docker start
 
 # Add gitlab-runner config
 mkdir -p /etc/gitlab-runner
@@ -54,28 +43,62 @@ cat > /etc/systemd/system/gitlab-runner.service.d/override.conf <<- EOM
 Environment=AWS_REGION=${AWS_REGION}
 EOM
 
-systemctl daemon-reload
+# Unit file for Gitlab Runner Cleanup Tool
+cat <<EOF >/etc/systemd/system/gitlab-runner-cleanup-tool.service
+[Unit]
+Description=Gitlab Runner Cleanup Tool Service
+After=docker.service
+Requires=docker.service
 
-# Start services
-systemctl restart gitlab-runner
+[Service]
+TimeoutStartSec=0
+Restart=always
+RestartSec=5
+ExecStartPre=-/bin/docker stop gitlab-runner-docker-cleanup
+ExecStartPre=-/bin/docker rm gitlab-runner-docker-cleanup
+ExecStart=/bin/docker run \
+  -e LOW_FREE_SPACE=${GITLAB_RCT_LOW_FREE_SPACE} \
+  -e EXPECTED_FREE_SPACE=${GITLAB_RCT_EXPECTED_FREE_SPACE} \
+  -e LOW_FREE_FILES_COUNT=${GITLAB_RCT_LOW_FREE_FILES_COUNT} \
+  -e EXPECTED_FREE_FILES_COUNT=${GITLAB_RCT_EXPECTED_FREE_FILES_COUNT} \
+  -e DEFAULT_TTL=${GITLAB_RCT_DEFAULT_TTL} \
+  -e USE_DF=${GITLAB_RCT_USE_DF} \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  --name=gitlab-runner-docker-cleanup \
+  quay.io/gitlab/gitlab-runner-docker-cleanup
 
-# Launch Gitlab Runner Cleanup Tool
-docker run -d \
-      -e LOW_FREE_SPACE=${GITLAB_RCT_LOW_FREE_SPACE} \
-      -e EXPECTED_FREE_SPACE=${GITLAB_RCT_EXPECTED_FREE_SPACE} \
-      -e LOW_FREE_FILES_COUNT=${GITLAB_RCT_LOW_FREE_FILES_COUNT} \
-      -e EXPECTED_FREE_FILES_COUNT=${GITLAB_RCT_EXPECTED_FREE_FILES_COUNT} \
-      -e DEFAULT_TTL=${GITLAB_RCT_DEFAULT_TTL} \
-      -e USE_DF=${GITLAB_RCT_USE_DF} \
-      --restart always \
-      -v /var/run/docker.sock:/var/run/docker.sock \
-      --name=gitlab-runner-docker-cleanup \
-      quay.io/gitlab/gitlab-runner-docker-cleanup
+[Install]
+WantedBy=multi-user.target
+EOF
 
-# Run prometheus node-exporter
-docker run -d \
-  --net="host" \
-  --pid="host" \
+# Unit file for Prometheus node-exporter
+cat <<EOF >/etc/systemd/system/node-exporter.service
+[Unit]
+Description=Prometheus Node Exporter Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+RestartSec=5
+ExecStartPre=-/bin/docker stop node-exporter
+ExecStartPre=-/bin/docker rm node-exporter
+ExecStart=/bin/docker run \
+  --net=host \
+  --pid=host \
   -v "/:/host:ro,rslave" \
-  quay.io/prometheus/node-exporter:v0.17.0 \
-  --path.rootfs /host
+  --name=node-exporter \
+  quay.io/prometheus/node-exporter:v0.17.0 --path.rootfs /host
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start required services
+systemctl daemon-reload
+systemctl enable --now ntpd.service
+systemctl enable --now docker.service
+systemctl enable --now gitlab-runner.service
+systemctl enable --now gitlab-runner-cleanup-tool.service
+systemctl enable --now node-exporter.service
